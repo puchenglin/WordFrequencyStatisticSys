@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -30,6 +31,7 @@ public class fileupload_servlet extends HttpServlet {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 		String cal = sdf.format(currentData);
 		String filePath = getServletContext().getRealPath("/") + "upload/"+cal;
+		String file_name = "";
 		
 		//初始化SmartUpload
         SmartUpload upload = new SmartUpload();
@@ -55,7 +57,8 @@ public class fileupload_servlet extends HttpServlet {
 //				File file1=new File(filePath+tempFile.getFileName());
 //				System.out.println("-------------------------------------------------");
 //				System.out.println("表单项名称:" + tempFile.getFieldName());
-//				System.out.println("文件名：" + tempFile.getFileName());
+				file_name = tempFile.getFileName();
+				System.out.println("文件名：" + file_name);
 //				System.out.println("文件长度：" + tempFile.getSize());
 //				System.out.println("文件扩展名:" + tempFile.getFileExt());
 //				System.out.println("文件全名：" + tempFile.getFilePathName());
@@ -72,7 +75,17 @@ public class fileupload_servlet extends HttpServlet {
         Map<String,Integer> map = FileUtil.readtxtFile(filePath+"/"+tempFile.getFileName());
         System.out.println(map.toString());
         
+        List<Map.Entry<String,Integer>> sort_data = FileUtil.sort(map).subList(0, 30);
+        Map<String,Integer> sort_map = FileUtil.convert(sort_data);
+        for(int i=0;i<30;i++)
+			System.out.println("排序："+sort_data.get(i));
+		
+
+        
+        request.getSession().setAttribute("filename", file_name);
         request.getSession().setAttribute("data", map);
+        request.getSession().setAttribute("sort_data", sort_map);
+        
         String path = request.getContextPath();
         response.sendRedirect(path+"/Chart.jsp");
 	}

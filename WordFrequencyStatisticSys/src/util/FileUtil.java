@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -176,10 +177,25 @@ public class FileUtil {
 		return sort_data;
 	}
 	
+	public static Map<String,Integer> convert(List<Map.Entry<String,Integer>> in_data)
+	{
+		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+		for(int i=0;i<in_data.size();i++) {
+			map.put(in_data.get(i).getKey(), in_data.get(i).getValue());
+		}
+		return map;
+	}
+	
 	public static void main(String[] args) {
-		List<Map.Entry<String,Integer>> sort_data = sort(readtxtFile2("E:/安娜卡拉琳娜.txt"));
-		for(int i=0;i<5;i++)
+		List<Map.Entry<String,Integer>> sort_data = sort(readtxtFile("E:/安娜卡拉琳娜.txt"));
+		Map<String, Integer> map = new LinkedHashMap<String, Integer>();
+		for(int i=0;i<5;i++) {
 			System.out.println(sort_data.get(i));
-
+			map.put(sort_data.get(i).getKey(), sort_data.get(i).getValue());
+		}
+//			
+		
+		System.out.println(map.toString());
+		
 	}
 }
